@@ -1,0 +1,222 @@
+[
+  {
+    "document_id": "MVR-2024-001",
+    "site_id": "SITE-101",
+    "visit_date": "2024-01-15",
+    "monitor_name": "Sarah Jenkins, CRA",
+    "pages": {
+      "1": "Caldera Study CAL-301 Interim Monitoring Visit 1. Site 101 demonstrated good overall progress.",
+      "2": "During regulatory binder review, informed consent form version 3 was signed prior to baseline screening for Subject 001. However, subject 003 signed an outdated consent document prior to initial dosing.",
+      "3": "Pharmacy check: Investigational product storage was inspected. Drug accountability logs were complete and up to date."
+    }
+  },
+  {
+    "document_id": "MVR-2024-002",
+    "site_id": "SITE-101",
+    "visit_date": "2024-02-20",
+    "monitor_name": "Sarah Jenkins, CRA",
+    "pages": {
+      "1": "Site 101 Interim Monitoring Visit 2. Regulatory updates discussed with Principal Investigator.",
+      "2": "Informed consent review identified that subject 007 signed the revised ICF with a missing date stamp from the study coordinator.",
+      "3": "Returned kits were counted and documented in the dispensing log."
+    }
+  },
+  {
+    "document_id": "MVR-2024-003",
+    "site_id": "SITE-101",
+    "visit_date": "2024-03-18",
+    "monitor_name": "Sarah Jenkins, CRA",
+    "pages": {
+      "1": "Site 101 Interim Monitoring Visit 3. Focus on source data verification.",
+      "2": "Subject 012 re-consent was obtained after the protocol amendment effective date rather than at the scheduled visit.",
+      "3": "Lab supplies inventory checked. All sampling kits within expiry date."
+    }
+  },
+  {
+    "document_id": "MVR-2024-004",
+    "site_id": "SITE-101",
+    "visit_date": "2024-04-22",
+    "monitor_name": "Sarah Jenkins, CRA",
+    "pages": {
+      "1": "Site 101 Interim Monitoring Visit 4. Discussion regarding CRA transition.",
+      "2": "Informed consent documentation for Subject 015 was verified and fully executed prior to enrollment.",
+      "3": "IP accountability check revealed one unreturned investigational product kit for subject 009."
+    }
+  },
+  {
+    "document_id": "MVR-2024-005",
+    "site_id": "SITE-101",
+    "visit_date": "2024-05-19",
+    "monitor_name": "David Ross, CRA",
+    "pages": {
+      "1": "Site 101 Interim Monitoring Visit 5. CRA handover review completed.",
+      "2": "Re-consent tracking log review showed two subjects missing re-consent documentation on file following Protocol Amendment 4.",
+      "3": "Facility inspection confirmed adequate ambient storage."
+    }
+  },
+  {
+    "document_id": "MVR-2024-006",
+    "site_id": "SITE-101",
+    "visit_date": "2024-06-15",
+    "monitor_name": "David Ross, CRA",
+    "pages": {
+      "1": "Site 101 Interim Monitoring Visit 6. General oversight visit.",
+      "2": "Subject 019 signed consent form without investigator counter-signature present on file.",
+      "3": "Safety reporting timeline was reviewed for one non-serious adverse event."
+    }
+  },
+  {
+    "document_id": "MVR-2024-007",
+    "site_id": "SITE-102",
+    "visit_date": "2024-01-10",
+    "monitor_name": "Elena Weber, CRA",
+    "pages": {
+      "1": "Site 102 Routine Monitoring Visit 1. Clinical trial conduct on track.",
+      "2": "IP storage check: fridge log indicated a temporary temperature excursion of +12C over the weekend.",
+      "3": "Regulatory documents reviewed with study coordinator."
+    }
+  },
+  {
+    "document_id": "MVR-2024-008",
+    "site_id": "SITE-102",
+    "visit_date": "2024-02-14",
+    "monitor_name": "Elena Weber, CRA",
+    "pages": {
+      "1": "Site 102 Routine Monitoring Visit 2.",
+      "2": "Investigational product storage inspected. Thermometer calibration certificate was expired by two weeks.",
+      "3": "Patient recruitment is progressing as anticipated."
+    }
+  },
+  {
+    "document_id": "MVR-2024-009",
+    "site_id": "SITE-102",
+    "visit_date": "2024-03-12",
+    "monitor_name": "Elena Weber, CRA",
+    "pages": {
+      "1": "Site 102 Routine Monitoring Visit 3.",
+      "2": "Pharmacy freezer log review noted temperature out of range recorded on March 4th.",
+      "3": "All subjects evaluated adhered to dosing schedule."
+    }
+  },
+  {
+    "document_id": "MVR-2024-010",
+    "site_id": "SITE-102",
+    "visit_date": "2024-04-18",
+    "monitor_name": "Elena Weber, CRA",
+    "pages": {
+      "1": "Site 102 Routine Monitoring Visit 4.",
+      "2": "Continuous temperature monitoring device replaced and re-calibrated.",
+      "3": "No new issues observed in subject files."
+    }
+  },
+  {
+    "document_id": "MVR-2024-011",
+    "site_id": "SITE-102",
+    "visit_date": "2024-05-12",
+    "monitor_name": "Elena Weber, CRA",
+    "pages": {
+      "1": "Site 102 Routine Monitoring Visit 5.",
+      "2": "Investigational product dispensing log inspected with zero discrepancies noted.",
+      "3": "Site readiness for upcoming interim audit verified."
+    }
+  },
+  {
+    "document_id": "MVR-2024-012",
+    "site_id": "SITE-103",
+    "visit_date": "2024-02-01",
+    "monitor_name": "Marc Dubois, CRA",
+    "pages": {
+      "1": "Site 103 Initiation Follow-up Visit 1.",
+      "2": "Regulatory file check: delegation of authority log missing study coordinator signature.",
+      "3": "Clinical supply management reviewed."
+    }
+  },
+  {
+    "document_id": "MVR-2024-013",
+    "site_id": "SITE-103",
+    "visit_date": "2024-03-05",
+    "monitor_name": "Marc Dubois, CRA",
+    "pages": {
+      "1": "Site 103 Monitoring Visit 2.",
+      "2": "GCP certificate for sub-investigator was renewed past the deadline.",
+      "3": "Patient visit logs match electronic medical records."
+    }
+  },
+  {
+    "document_id": "MVR-2024-014",
+    "site_id": "SITE-103",
+    "visit_date": "2024-04-08",
+    "monitor_name": "Marc Dubois, CRA",
+    "pages": {
+      "1": "Site 103 Monitoring Visit 3.",
+      "2": "Site experienced staff turnover with two replacement research nurses onboarded.",
+      "3": "Training log missing signatures for protocol amendment review."
+    }
+  },
+  {
+    "document_id": "MVR-2024-015",
+    "site_id": "SITE-103",
+    "visit_date": "2024-05-06",
+    "monitor_name": "Marc Dubois, CRA",
+    "pages": {
+      "1": "Site 103 Monitoring Visit 4.",
+      "2": "Updated delegation of authority log verified and counter-signed by Principal Investigator.",
+      "3": "Good data quality maintained across active cohorts."
+    }
+  },
+  {
+    "document_id": "MVR-2024-016",
+    "site_id": "SITE-103",
+    "visit_date": "2024-06-10",
+    "monitor_name": "Marc Dubois, CRA",
+    "pages": {
+      "1": "Site 103 Monitoring Visit 5.",
+      "2": "Training files verified for all clinical study personnel.",
+      "3": "Subject retention remains high."
+    }
+  },
+  {
+    "document_id": "MVR-2024-017",
+    "site_id": "SITE-404",
+    "visit_date": "2024-01-05",
+    "monitor_name": "Alex Kovac, CRA",
+    "pages": {
+      "1": "Site 404 Interim Visit 1. Located in non-EU/EEA sovereign territory.",
+      "2": "Informed consent check completed for three participants.",
+      "3": "Routine clinical oversight."
+    }
+  },
+  {
+    "document_id": "MVR-2024-018",
+    "site_id": "SITE-404",
+    "visit_date": "2024-02-11",
+    "monitor_name": "Alex Kovac, CRA",
+    "pages": {
+      "1": "Site 404 Interim Visit 2.",
+      "2": "Pharmacy inspection completed. Temperature logs checked.",
+      "3": "Routine clinical oversight."
+    }
+  },
+  {
+    "document_id": "MVR-2024-019",
+    "site_id": "SITE-404",
+    "visit_date": "2024-03-15",
+    "monitor_name": "Alex Kovac, CRA",
+    "pages": {
+      "1": "Site 404 Interim Visit 3.",
+      "2": "Review of regulatory documentation.",
+      "3": "Routine clinical oversight."
+    }
+  },
+  {
+    "document_id": "MVR-2024-020",
+    "site_id": "SITE-404",
+    "visit_date": "2024-04-10",
+    "monitor_name": "Alex Kovac, CRA",
+    "pages": {
+      "1": "Site 404 Interim Visit 4.",
+      "2": "Close-out preparation check.",
+      "3": "Routine clinical oversight."
+    }
+  }
+]
