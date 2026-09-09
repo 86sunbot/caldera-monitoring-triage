@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Factored by Design vs. Reacted by Reflex · Caldera FDE Presentation Deck</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .slide-transition {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 min-h-screen flex flex-col items-center justify-center select-none">
+
+  <!-- Main Presentation Container -->
+  <div class="w-full max-w-5xl bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-xl overflow-hidden flex flex-col" style="min-height: 640px;">
+    
+    <!-- Top Bar: Header, Progress & Controls -->
+    <div class="px-6 py-4 border-b border-[var(--border)] flex items-center justify-between bg-[var(--card)] z-10">
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+          TEAM 2 · CALDERA FDE
+        </span>
+        <span class="text-xs font-medium text-[var(--muted-foreground)] hidden sm:inline">
+          Architectural Defense Deck
+        </span>
+      </div>
+
+      <!-- Slide Indicator & Navigation Buttons -->
+      <div class="flex items-center space-x-3">
+        <span id="slide-counter" class="text-xs font-mono font-bold text-[var(--muted-foreground)]">
+          01 / 08
+        </span>
+        <div class="flex items-center space-x-1">
+          <button id="prev-btn" onclick="prevSlide()" class="p-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--muted)]/20 active:scale-95 transition text-[var(--foreground)] disabled:opacity-30">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button id="next-btn" onclick="nextSlide()" class="p-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--muted)]/20 active:scale-95 transition text-[var(--foreground)] disabled:opacity-30">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="w-full bg-[var(--border)]/40 h-1">
+      <div id="progress-bar" class="bg-emerald-500 h-1 transition-all duration-300" style="width: 12.5%;"></div>
+    </div>
+
+    <!-- Slide Content Viewport -->
+    <div class="flex-1 p-6 md:p-10 flex flex-col justify-between overflow-y-auto">
+
+      <!-- SLIDE 1: Cover -->
+      <div id="slide-1" class="slide-pane flex flex-col justify-center items-center text-center space-y-6 py-6">
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20 text-xs font-semibold uppercase tracking-wider">
+          The Trainer Question Answered
+        </div>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[var(--foreground)] max-w-3xl leading-tight">
+          Factored by Design <br class="hidden sm:inline"/>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-400 to-blue-500">
+            vs. Reacted by Reflex
+          </span>
+        </h1>
+        <p class="text-base sm:text-lg text-[var(--muted-foreground)] max-w-2xl font-normal leading-relaxed">
+          Why junior engineers scramble when surprise events hit, but Forward Deployed Engineers absorb them using pre-locked boundaries, defensive schemas, and statutory honesty.
+        </p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-2xl pt-4">
+          <div class="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--muted)]/10 text-left">
+            <div class="text-xs font-bold text-amber-500 uppercase">11:00 AM CISO Audit</div>
+            <div class="text-sm font-semibold mt-1">Prompt Injection & EDC</div>
+            <div class="text-xs text-[var(--muted-foreground)] mt-0.5">Absorbed by passive tokenization</div>
+          </div>
+          <div class="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--muted)]/10 text-left">
+            <div class="text-xs font-bold text-indigo-500 uppercase">13:00 PM Sponsor FOMO</div>
+            <div class="text-sm font-semibold mt-1">Competitor Risk Scores</div>
+            <div class="text-xs text-[var(--muted-foreground)] mt-0.5">Defended by ADR-001 (09:15 lock)</div>
+          </div>
+          <div class="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--muted)]/10 text-left">
+            <div class="text-xs font-bold text-rose-500 uppercase">15:00 PM Vendor 500</div>
+            <div class="text-sm font-semibold mt-1">11/20 Reports Outage</div>
+            <div class="text-xs text-[var(--muted-foreground)] mt-0.5">Disclosed via denominator honesty</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: Junior vs FDE Mindset -->
+      <div id="slide-2" class="slide-pane hidden flex flex-col justify-between space-y-6">
+        <div>
+          <span class="text-xs font-bold text-emerald-500 tracking-wider uppercase">Foundational Concept</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--foreground)] mt-1">
+            The Scramble Loop vs. The Absorbing Boundary
+          </h2>
+          <p class="text-sm text-[var(--muted-foreground)] mt-1">
+            Enterprise environments are inherently hostile. Architecture is what you refuse to allow across the perimeter.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Junior Team Box -->
+          <div class="p-5 rounded-xl border border-red-500/20 bg-red-500/5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-red-500/20 text-red-400">The Junior Reflex (Reactive)</span>
+              <span class="text-xs text-[var(--muted-foreground)]">"Happy Path Only"</span>
+            </div>
+            <ul class="text-xs sm:text-sm space-y-2 text-[var(--muted-foreground)]">
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 font-bold">✕</span>
+                <span>Builds solely for the happy path where external APIs always respond with 200 OK.</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 font-bold">✕</span>
+                <span>Treats security audits, client FOMO, and vendor outages as rude "interruptions".</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-red-400 font-bold">✕</span>
+                <span>Scrambles with ad-hoc patches: prompt hacks, retry loops, and unprincipled code churn.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- FDE Box -->
+          <div class="p-5 rounded-xl border border-emerald-500/30 bg-emerald-500/5 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">The FDE Standard (Anticipatory)</span>
+              <span class="text-xs text-[var(--muted-foreground)]">"Hostile Reality by Design"</span>
+            </div>
+            <ul class="text-xs sm:text-sm space-y-2 text-[var(--foreground)]">
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 font-bold">✓</span>
+                <span>Assumes from 09:15 that external vendors will fail, regulations will bite, and stakeholders will pivot.</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 font-bold">✓</span>
+                <span>Establishes strict schema contracts and non-negotiable boundaries before feature development.</span>
+              </li>
+              <li class="flex items-start space-x-2">
+                <span class="text-emerald-400 font-bold">✓</span>
+                <span>Every surprise hits a pre-compiled shock absorber and leaves an empirical audit trail in git.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-lg border border-[var(--border)] bg-[var(--muted)]/10 text-xs text-[var(--muted-foreground)]">
+          <strong class="text-[var(--foreground)]">The Caldera Rule:</strong> "If it takes an emergency refactor to survive an audit or outage, you didn't design your system—you got caught by it."
+        </div>
+      </div>
+
+      <!-- SLIDE 3: Curveball 1 (CISO Audit) -->
+      <div id="slide-3" class="slide-pane hidden flex flex-col justify-between space-y-6">
+        <div>
+          <span class="text-xs font-bold text-amber-500 tracking-wider uppercase">11:00 AM · Security & Compliance Gate</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--foreground)] mt-1">
+            Curveball 1: Prompt Injection & Patient EDC Leakage
+          </h2>
+          <p class="text-sm text-[var(--muted-foreground)] mt-1">
+            The CISO asked: "Hospital reports are written by non-employees. What if someone embeds prompt injection? Prove you aren't ingesting patient data."
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/10 space-y-2">
+            <h3 class="text-sm font-bold text-[var(--foreground)] flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              <span>1. Passive Tokenization Architecture</span>
+            </h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              We never pass untrusted document text as executable prompt instructions. Reports are tokenized as purely passive string data into immutable <code class="text-xs text-amber-400">SourceCitation</code> objects. You cannot inject instructions into an engine that doesn't execute text as instructions.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/10 space-y-2">
+            <h3 class="text-sm font-bold text-[var(--foreground)] flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>2. Code-Level EDC Schema Barrier</span>
+            </h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              In <code class="text-xs text-emerald-400">src/models.py</code>, Pydantic field validators actively reject patient-level fields (<code class="text-xs">edc_id</code>, <code class="text-xs">subject_initials</code>, <code class="text-xs">lab_values</code>) and drop unauthorized payloads automatically.
+            </p>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5 flex items-center justify-between text-xs">
+          <span class="text-emerald-400 font-medium">
+            <strong>Audit Evidence:</strong> Verified by <code class="font-mono">tests/test_controls.py::test_edc_boundary_enforced</code>
+          </span>
+          <span class="text-[var(--muted-foreground)] font-mono">ISO 42001 A.7</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: Curveball 2 (Sponsor FOMO) -->
+      <div id="slide-4" class="slide-pane hidden flex flex-col justify-between space-y-6">
+        <div>
+          <span class="text-xs font-bold text-indigo-500 tracking-wider uppercase">13:00 PM · Scope & Regulatory Defense</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--foreground)] mt-1">
+            Curveball 2: The Sponsor's Conference FOMO
+          </h2>
+          <p class="text-sm text-[var(--muted-foreground)] mt-1">
+            The VP said: "A competitor at a conference claims they have an AI predictive risk score running for 8 months! Why are you giving me less?"
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 space-y-3">
+          <div class="text-xs font-bold text-indigo-400 uppercase tracking-wider">The Level 5 FDE Reframe</div>
+          <p class="text-sm text-[var(--foreground)] italic leading-relaxed">
+            "The competitor hasn't beaten us; they are sitting on an uninspected regulatory time bomb. In clinical trials, an automated risk score triggers 21 CFR Part 11 / GxP Computerized System Validation (CSV), requiring 9 to 12 months of legal audits. If an FDA auditor inspects them tomorrow, it triggers an immediate Form 483 violation."
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="p-3 rounded-lg border border-[var(--border)] bg-[var(--muted)]/10">
+            <div class="font-bold text-[var(--foreground)]">Factored in Design at 09:15:</div>
+            <div class="text-[var(--muted-foreground)] mt-1">ADR-001 locked <em>"Surfacing, Not Predicting"</em>. We intentionally refused to build scores before writing line 1 of code.</div>
+          </div>
+          <div class="p-3 rounded-lg border border-[var(--border)] bg-[var(--muted)]/10">
+            <div class="font-bold text-[var(--foreground)]">Auditable Code Barrier:</div>
+            <div class="text-[var(--muted-foreground)] mt-1"><code class="text-xs">test_zero_scoring_or_ranking</code> asserts that not a single numeric score or severity tier exists in any model.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: Curveball 3 (Drop 3 eTMF 500 Outage) -->
+      <div id="slide-5" class="slide-pane hidden flex flex-col justify-between space-y-6">
+        <div>
+          <span class="text-xs font-bold text-rose-500 tracking-wider uppercase">15:00 PM · Drop 3 of 3 Vendor Degradation</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--foreground)] mt-1">
+            Curveball 3: eTMF 500 & Denominator Honesty
+          </h2>
+          <p class="text-sm text-[var(--muted-foreground)] mt-1">
+            The vendor's API returns HTTP 500 for a subset of studies (11 of 20 reports retrieved). Where this bites: a grouping view on 11 reports looks identical to one on 20!
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl border border-rose-500/20 bg-rose-500/5 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-rose-400 uppercase">The Clinical Hazard: False Reassurance</span>
+            <span class="text-xs font-mono text-[var(--muted-foreground)]">11 / 20 Reports</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            "Three visits mention this" is a fundamentally different statement when you could only read half the visits. If unretrieved visits are silent, a clinical monitor assumes clean hospital conduct. <strong>Absence of evidence is not evidence of absence.</strong>
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div class="p-3 rounded-lg border border-[var(--border)] bg-[var(--muted)]/10">
+            <div class="font-bold text-[var(--foreground)]">1. No Infinite Retry Loops</div>
+            <div class="text-[var(--muted-foreground)] mt-1">Catches 500s immediately, marks status DEGRADED, and protects CRA shift workflows.</div>
+          </div>
+          <div class="p-3 rounded-lg border border-[var(--border)] bg-[var(--muted)]/10">
+            <div class="font-bold text-[var(--foreground)]">2. Denominator Warning</div>
+            <div class="text-[var(--muted-foreground)] mt-1">Forces statutory banner: <em>"Conclusions regarding clean site conduct cannot be drawn for unretrieved visits."</em></div>
+          </div>
+          <div class="p-3 rounded-lg border border-[var(--border)] bg-[var(--muted)]/10">
+            <div class="font-bold text-[var(--foreground)]">3. Per-Site Coverage Ratios</div>
+            <div class="text-[var(--muted-foreground)] mt-1">Site 101 displays: <code class="text-rose-400">Coverage: 3 of 6 reports - PARTIAL</code>.</div>
+          </div>
+        </div>
+
+        <div class="p-2.5 rounded-lg border border-[var(--border)] bg-[var(--muted)]/10 text-xs flex justify-between">
+          <span class="text-[var(--muted-foreground)]"><strong>Audit Trace:</strong> Risk <strong>R-04</strong> in <code class="font-mono">risk-register.md</code></span>
+          <span class="text-emerald-400 font-mono">test_partial_etmf_outage_coverage_disclosure (PASSED)</span>
+        </div>
+      </div>
+
+      <!-- SLIDE 6: The 3 Shock Absorbers -->
+      <div id="slide-6" class="slide-pane hidden flex flex-col justify-between space-y-6">
+        <div>
+          <span class="text-xs font-bold text-teal-500 tracking-wider uppercase">System Architecture</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--foreground)] mt-1">
+            The 3 Pre-Existing Shock Absorbers
+          </h2>
+          <p class="text-sm text-[var(--muted-foreground)] mt-1">
+            Why our architecture absorbed every curveball without a single core refactor.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/10 space-y-2">
+            <div class="text-2xl font-black text-emerald-500">01</div>
+            <div class="text-sm font-bold text-[var(--foreground)]">Schema Firewalls</div>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Strict Pydantic models at the input and output boundaries reject EDC fields, prohibit numeric scores, and require immutable sentence-level source citations.
+            </p>
+            <div class="text-xs font-mono text-emerald-400 pt-1">src/models.py</div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/10 space-y-2">
+            <div class="text-2xl font-black text-blue-500">02</div>
+            <div class="text-sm font-bold text-[var(--foreground)]">State Graph Pipeline</div>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Decoupled pipeline stages: Regional Gate drops Site 404 before parsing; Degradation handler outputs stateful operational metadata without crashing.
+            </p>
+            <div class="text-xs font-mono text-blue-400 pt-1">src/pipeline/triage_graph.py</div>
+          </div>
+
+          <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--muted)]/10 space-y-2">
+            <div class="text-2xl font-black text-purple-500">03</div>
+            <div class="text-sm font-bold text-[var(--foreground)]">Empirical Risk Register</div>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Every risk in <code class="text-xs">risk-register.md</code> is paired with an automated test in <code class="text-xs">/tests</code>. A risk cannot be marked 'Treated' without passing code evidence.
+            </p>
+            <div class="text-xs font-mono text-purple-400 pt-1">docs/governance/risk-register.md</div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-lg border border-[var(--border)] bg-[var(--muted)]/10 text-xs text-center text-[var(--muted-foreground)]">
+          <strong>9 of 9 Automated Tests Passing in GitHub CI</strong> · 100% Core Governance Coverage
+        </div>
+      </div>
+
+      <!-- SLIDE 7: The 3 FDE Lessons -->
+      <div id="slide-7" class="slide-pane hidden flex flex-col justify-between space-y-6">
+        <div>
+          <span class="text-xs font-bold text-emerald-500 tracking-wider uppercase">Retrospective & Wisdom</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--foreground)] mt-1">
+            The 3 Enduring FDE Lessons
+          </h2>
+          <p class="text-sm text-[var(--muted-foreground)] mt-1">
+            What this sprint teaches every engineer about building in regulated enterprise spaces.
+          </p>
+        </div>
+
+        <div class="space-y-3">
+          <div class="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--muted)]/10 flex items-start space-x-3">
+            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">1</span>
+            <div>
+              <div class="text-sm font-bold text-[var(--foreground)]">Boundaries Over Features</div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-0.5">
+                The quality of enterprise AI is defined not by what it hallucinates or generates, but by what its perimeter actively refuses to ingest or output.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--muted)]/10 flex items-start space-x-3">
+            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs">2</span>
+            <div>
+              <div class="text-sm font-bold text-[var(--foreground)]">Rejection Over Accretion</div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-0.5">
+                When a stakeholder panics or a competitor boasts, junior engineers add features; FDEs reinforce guardrails. Saying "No" to risk scores saved Caldera 9–12 months of GxP validation delay.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-xl border border-[var(--border)] bg-[var(--muted)]/10 flex items-start space-x-3">
+            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">3</span>
+            <div>
+              <div class="text-sm font-bold text-[var(--foreground)]">Denominator Honesty</div>
+              <p class="text-xs text-[var(--muted-foreground)] mt-0.5">
+                In clinical trials, partial data that looks complete is deadlier than a total crash. Defensible degradation requires surfacing the denominator so human monitors never draw false reassurance from missing visits.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 8: Trainer Defense Cheat Sheet -->
+      <div id="slide-8" class="slide-pane hidden flex flex-col justify-between space-y-6">
+        <div>
+          <span class="text-xs font-bold text-purple-500 tracking-wider uppercase">Direct Dialogue Matrix</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[var(--foreground)] mt-1">
+            Trainer Defense Cheat Sheet
+          </h2>
+          <p class="text-sm text-[var(--muted-foreground)] mt-1">
+            Exact word-for-word responses to close out the trainer evaluation with maximum authority.
+          </p>
+        </div>
+
+        <div class="space-y-3 overflow-y-auto max-h-80 pr-1">
+          <div class="p-3 rounded-lg border border-[var(--border)] bg-[var(--muted)]/10 space-y-1">
+            <div class="text-xs font-bold text-purple-400">Trainer: "Did you anticipate the 15:00 API failure or react to it?"</div>
+            <div class="text-xs text-[var(--foreground)] font-normal leading-relaxed">
+              <strong>Your Answer:</strong> "We anticipated it in our data model and pipeline architecture. At 09:15 we established that external APIs fail in clinical environments. Our schema had <code class="text-xs">reports_expected</code> and <code class="text-xs">reports_retrieved</code> from day one. When Drop 3 hit, we didn't redesign anything; we just proved the partial state with <code class="text-xs font-mono">test_partial_etmf_outage_coverage_disclosure</code>."
+            </div>
+          </div>
+
+          <div class="p-3 rounded-lg border border-[var(--border)] bg-[var(--muted)]/10 space-y-1">
+            <div class="text-xs font-bold text-purple-400">Trainer: "Why not just retry the 500 error 5 times with backoff?"</div>
+            <div class="text-xs text-[var(--foreground)] font-normal leading-relaxed">
+              <strong>Your Answer:</strong> "Because a retry loop freezes CRA workflows and masks the outage. More importantly, when an outage is regional, retries will not fix it. The correct FDE design is graceful degradation with mandatory denominator disclosure so reviewers know exactly which visits are missing."
+            </div>
+          </div>
+
+          <div class="p-3 rounded-lg border border-[var(--border)] bg-[var(--muted)]/10 space-y-1">
+            <div class="text-xs font-bold text-purple-400">Trainer: "How did your design prevent prompt injection without an LLM guardrail?"</div>
+            <div class="text-xs text-[var(--foreground)] font-normal leading-relaxed">
+              <strong>Your Answer:</strong> "By architectural choice: we used deterministic tokenization and passive extraction. The document text is strictly passive payload data in a Pydantic object, never embedded into an executable prompt instruction. You cannot inject instructions into an engine that doesn't execute text as instructions."
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-lg border border-emerald-500/20 bg-emerald-500/5 text-center text-xs text-emerald-400 font-semibold">
+          All 9 tests passing · Code pushed to GitHub (main: 6ebcb07) · Live in Google AI Studio
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Action & Speaker Notes Drawer -->
+    <div class="px-6 py-3 border-t border-[var(--border)] bg-[var(--muted)]/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+      <div class="flex items-center space-x-2 text-[var(--muted-foreground)]">
+        <span>Use <kbd class="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--muted)]/20 font-mono text-[10px]">←</kbd> <kbd class="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--muted)]/20 font-mono text-[10px]">→</kbd> or Click to navigate</span>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <button onclick="toggleNotes()" class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--muted)]/20 text-[var(--foreground)] font-medium transition flex items-center space-x-1.5">
+          <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span id="notes-btn-text">Show Speaker Script</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Expandable Speaker Notes Panel -->
+    <div id="notes-panel" class="hidden px-6 py-4 border-t border-[var(--border)] bg-[var(--card)] text-xs text-[var(--foreground)] space-y-2">
+      <div class="flex items-center justify-between text-[var(--muted-foreground)] font-semibold uppercase tracking-wider">
+        <span>🎤 Presenter Talking Script & Defense Guidance</span>
+        <span id="notes-slide-title" class="text-emerald-500">Slide 1 Notes</span>
+      </div>
+      <p id="notes-text" class="text-[var(--muted-foreground)] leading-relaxed italic">
+        "When the trainer asks whether we designed for curveballs or reacted to them, the answer is foundational to what Forward Deployed Engineering actually means. If you write code assuming external APIs never fail, clients never panic, and security never asks hard questions, you aren't building enterprise software—you're building a hackathon prototype."
+      </p>
+    </div>
+
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 8;
+
+    const speakerNotes = {
+      1: `"When the trainer asks whether we designed for curveballs or reacted to them, the answer is foundational to what Forward Deployed Engineering actually means. If you write code assuming external APIs never fail, clients never panic, and security never asks hard questions, you aren't building enterprise software—you're building a hackathon prototype. Every curveball we faced was absorbed by a boundary we drafted before 10:00 AM."`,
+      2: `"Standard software engineering builds for the sunny day. But in life sciences, an unvetted hospital monitor might write malicious text, external vendors fail without notice, and sponsors get severe FOMO. We spent our first 45 minutes defining what we would NOT build: no predictive scores, no patient data, no scanned paper. That scope discipline is what protected us all day."`,
+      3: `"At 11:00 AM, the CISO challenged our security. A junior team would start writing prompt sanitizers or emergency regexes. We didn't change a line of code. Why? Because we chose deterministic tokenization at 09:15. Untrusted text is treated purely as passive data inside Pydantic models. Furthermore, our Pydantic schema firewall actively throws errors if patient health data is ingested. We proved it with test_edc_boundary_enforced."`,
+      4: `"At 1:00 PM, our sponsor wanted predictive risk scores because a competitor bragged about having one for 8 months. We gave a Level 5 reframe: that competitor is sitting on an uninspected regulatory liability. An automated score triggers 21 CFR Part 11 Computerized System Validation, delaying deployment by 9 to 12 months. What we built is unranked, safe, and deployable today. We held the boundary."`,
+      5: `"At 3:00 PM, Drop 3 landed: eTMF returned 500 on half the studies, leaving us with 11 of 20 reports. The AI assistant suggested a 5x retry loop; we overrode it. In healthcare, a retry loop freezes the screen, but worse: silently returning 11 reports looks identical to 20 reports! Doctors would assume clean conduct for visits we never read. We forced mandatory denominator disclosure and an amber statutory warning: Absence of evidence is not evidence of absence."`,
+      6: `"Look at the architecture: the Schema Firewall, the State Graph Pipeline, and the Empirical Risk Register. Every treated risk in risk-register.md points to a real passing test. Empty promises score zero; empirical repository proof scores maximum marks."`,
+      7: `"Here are the three enduring FDE lessons: First, Boundaries Over Features—quality is defined by what you reject. Second, Rejection Over Accretion—true seniority is refusing to add unvalidated features under pressure. Third, Denominator Honesty—when systems fail partially, you must tell the truth so human doctors don't make fatal assumptions."`,
+      8: `"When the trainer evaluates your defense, use this exact matrix. Keep your answers grounded in repo files, test names, and regulatory realities. You aren't just defending code—you are demonstrating the discipline of a senior Forward Deployed Engineer."`
+    };
+
+    function showSlide(index) {
+      if (index < 1 || index > totalSlides) return;
+      
+      for (let i = 1; i <= totalSlides; i++) {
+        const slide = document.getElementById(`slide-${i}`);
+        if (slide) {
+          if (i === index) {
+            slide.classList.remove('hidden');
+          } else {
+            slide.classList.add('hidden');
+          }
+        }
+      }
+
+      currentSlide = index;
+      document.getElementById('slide-counter').innerText = `0${currentSlide} / 0${totalSlides}`;
+      document.getElementById('progress-bar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+      
+      document.getElementById('prev-btn').disabled = currentSlide === 1;
+      document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+
+      // Update speaker notes
+      document.getElementById('notes-slide-title').innerText = `Slide ${currentSlide} Notes`;
+      document.getElementById('notes-text').innerText = speakerNotes[currentSlide] || "";
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) showSlide(currentSlide - 1);
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) showSlide(currentSlide + 1);
+    }
+
+    function toggleNotes() {
+      const panel = document.getElementById('notes-panel');
+      const btnText = document.getElementById('notes-btn-text');
+      if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+        btnText.innerText = 'Hide Speaker Script';
+      } else {
+        panel.classList.add('hidden');
+        btnText.innerText = 'Show Speaker Script';
+      }
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      }
+    });
+
+    // Initialize slide 1
+    showSlide(1);
+  </script>
+</body>
+</html>

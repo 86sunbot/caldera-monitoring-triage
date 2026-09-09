@@ -9,7 +9,11 @@
 > This system ingests clinical monitoring visit reports, extracts candidate observations with verbatim source attribution (document ID, page number, sentence), groups them by site and theme, and presents an unranked review packet to a human clinical reviewer.
 
 📖 **New here?** Read the complete plain-English walkthrough: **[`docs/FDE_SPRINT_STORY_AND_WALKTHROUGH.md`](docs/FDE_SPRINT_STORY_AND_WALKTHROUGH.md)** — explaining the client problem, the GxP legal trap, our code architecture, the 3 curveballs, and our 16:15 demo script.  
-🎤 **Demo with Trainer?** Follow the step-by-step 10-minute script: **[`docs/DEMO_PRESENTATION_SCRIPT.md`](docs/DEMO_PRESENTATION_SCRIPT.md)** — screen actions, spoken dialogue, and Q&A cheat sheet.
+🎤 **Demo with Trainer?** Follow the step-by-step 10-minute script: **[`docs/DEMO_PRESENTATION_SCRIPT.md`](docs/DEMO_PRESENTATION_SCRIPT.md)** — screen actions, spoken dialogue, and Q&A cheat sheet.  
+📊 **Trainer Defense Presentation (PPT)**:
+- 🖥️ **PowerPoint Deck (.PPTX)**: **[`docs/Caldera_FDE_Factored_by_Design_Presentation.pptx`](docs/Caldera_FDE_Factored_by_Design_Presentation.pptx)** — 8 widescreen 16:9 slides.
+- 🌐 **Interactive Web Slide Deck (.HTML)**: **[`docs/curveball_presentation_deck.html`](docs/curveball_presentation_deck.html)** — Animated slides with speaker notes.
+- 📝 **Architectural Defense Document (.MD)**: **[`docs/FDE_CURVEBALLS_BY_DESIGN_DECK.md`](docs/FDE_CURVEBALLS_BY_DESIGN_DECK.md)** — Detailed FDE lesson & transcript.
 
 ---
 
