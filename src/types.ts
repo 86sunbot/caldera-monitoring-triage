@@ -40,6 +40,9 @@ export interface SiteReviewPacket {
   site_id: string;
   country: string;
   total_reports_processed: number;
+  total_reports_expected?: number;
+  coverage_ratio?: string;
+  is_partial_coverage?: boolean;
   themes: SameThemeAcrossVisitsView[];
 }
 
@@ -54,6 +57,10 @@ export interface ExclusionRecord {
 export interface TriageOutput {
   system_status: 'NORMAL' | 'DEGRADED';
   disclaimer: string;
+  reports_expected: number;
+  reports_retrieved: number;
+  is_partial_dataset: boolean;
+  data_completeness_warning?: string | null;
   processed_sites: SiteReviewPacket[];
   exclusions: ExclusionRecord[];
   degradation_notices: string[];
@@ -62,6 +69,7 @@ export interface TriageOutput {
 export interface TriageRequestPayload {
   reports?: MonitoringReport[];
   simulate_etmf_500?: boolean;
+  simulate_partial_etmf_500?: boolean;
   simulate_registry_500?: boolean;
   prefer_ai_studio?: boolean;
   gemini_key?: string;

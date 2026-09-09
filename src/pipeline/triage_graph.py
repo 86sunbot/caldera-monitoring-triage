@@ -48,6 +48,13 @@ class MonitoringTriagePipeline:
         exclusions: List[ExclusionRecord] = []
         reports: List[MonitoringReport] = []
 
+        # Calculate expected report counts per site
+        reports_expected = len(raw_reports_data)
+        site_expected_count: Dict[str, int] = defaultdict(int)
+        for raw in raw_reports_data:
+            s_id = raw.get("site_id", "UNKNOWN")
+            site_expected_count[s_id] += 1
+
         # 1. Ingress via eTMF (Resilience Gate)
         try:
             reports = self.etmf_client.fetch_reports(raw_reports_data)
@@ -59,9 +66,33 @@ class MonitoringTriagePipeline:
             )
             return TriageOutput(
                 system_status=system_status,
+                reports_expected=reports_expected,
+                reports_retrieved=0,
+                is_partial_dataset=True,
+                data_completeness_warning=(
+                    "CRITICAL: Complete eTMF Document Gateway outage (HTTP 500). Zero documents retrieved."
+                ),
                 processed_sites=[],
                 exclusions=[],
                 degradation_notices=degradation_notices,
+            )
+
+        reports_retrieved = len(reports)
+        is_partial_dataset = reports_retrieved < reports_expected
+        data_completeness_warning = None
+
+        if is_partial_dataset:
+            system_status = "DEGRADED"
+            missing_count = reports_expected - reports_retrieved
+            degradation_notices.append(
+                f"VENDOR SERVICE NOTICE: eTMF Document API degraded (HTTP 500). "
+                f"Partial retrieval: {reports_retrieved} of {reports_expected} reports retrieved ({missing_count} failed)."
+            )
+            data_completeness_warning = (
+                f"⚠️ DEGRADED REVIEW PACKET (PARTIAL DATASET): Only {reports_retrieved} of {reports_expected} reports "
+                "were retrieved due to upstream vendor HTTP 500 errors. "
+                "ABSENCE OF EVIDENCE IS NOT EVIDENCE OF ABSENCE: Conclusions regarding clean site conduct "
+                "or lack of deviations cannot be drawn for unretrieved monitoring visits."
             )
 
         # 2. Regional Compliance Gate (ISO 42001 A.7 Data Control)
@@ -70,7 +101,6 @@ class MonitoringTriagePipeline:
             try:
                 is_restricted, country, justification = self.site_registry.is_region_restricted(report.site_id)
             except RuntimeError as err:
-                # Curveball 3: Upstream Site Registry 500 error
                 system_status = "DEGRADED"
                 degradation_notices.append(
                     f"COMPLIANCE GATE DEGRADED: Site Registry lookup failed for {report.site_id} ({str(err)}). "
@@ -88,7 +118,6 @@ class MonitoringTriagePipeline:
                 continue
 
             if is_restricted:
-                # Pre-processing drop: document text is NEVER parsed
                 exclusions.append(
                     ExclusionRecord(
                         document_id=report.document_id,
@@ -133,11 +162,18 @@ class MonitoringTriagePipeline:
             # Sort themes alphabetically (STRICTLY NO RANKING OR SCORES)
             theme_views.sort(key=lambda t: t.theme)
 
+            processed_count = len(site_reports_count[site_id])
+            expected_count = site_expected_count.get(site_id, processed_count)
+            is_site_partial = processed_count < expected_count
+
             processed_sites.append(
                 SiteReviewPacket(
                     site_id=site_id,
                     country=country,
-                    total_reports_processed=len(site_reports_count[site_id]),
+                    total_reports_processed=processed_count,
+                    total_reports_expected=expected_count,
+                    coverage_ratio=f"{processed_count} of {expected_count} reports",
+                    is_partial_coverage=is_site_partial,
                     themes=theme_views,
                 )
             )
@@ -148,6 +184,10 @@ class MonitoringTriagePipeline:
         # 5. Assemble and return Reviewer Packet
         return TriageOutput(
             system_status=system_status,
+            reports_expected=reports_expected,
+            reports_retrieved=reports_retrieved,
+            is_partial_dataset=is_partial_dataset,
+            data_completeness_warning=data_completeness_warning,
             processed_sites=processed_sites,
             exclusions=exclusions,
             degradation_notices=degradation_notices,

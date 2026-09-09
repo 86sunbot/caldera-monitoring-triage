@@ -87,6 +87,9 @@ class SiteReviewPacket(BaseModel):
     site_id: str
     country: str
     total_reports_processed: int
+    total_reports_expected: Optional[int] = None
+    coverage_ratio: Optional[str] = None
+    is_partial_coverage: bool = False
     themes: List[SameThemeAcrossVisitsView]
 
 
@@ -107,6 +110,10 @@ class TriageOutput(BaseModel):
         "Informational surfacing only. Not a predictive score, not a regulatory deviation record. "
         "All clinical actions require human evaluation by an authorized clinical monitor."
     )
+    reports_expected: int = 0
+    reports_retrieved: int = 0
+    is_partial_dataset: bool = False
+    data_completeness_warning: Optional[str] = None
     processed_sites: List[SiteReviewPacket]
     exclusions: List[ExclusionRecord]
     degradation_notices: List[str] = Field(default_factory=list)

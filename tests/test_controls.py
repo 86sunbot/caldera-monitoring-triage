@@ -102,11 +102,20 @@ def test_zero_scoring_or_ranking():
     allowed_fields = {
         "system_status",
         "disclaimer",
+        "reports_expected",
+        "reports_retrieved",
+        "is_partial_dataset",
+        "data_completeness_warning",
         "processed_sites",
         "exclusions",
         "degradation_notices"
     }
     assert set(TriageOutput.model_fields.keys()) == allowed_fields
+    # Explicit check: strictly forbidden to contain scores or ranks
+    for field in TriageOutput.model_fields.keys():
+        assert "score" not in field.lower()
+        assert "rank" not in field.lower()
+        assert "priority" not in field.lower()
 
 
 def test_verbatim_sentence_and_page_provenance():

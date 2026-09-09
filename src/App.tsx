@@ -34,6 +34,7 @@ export default function App() {
   const [geminiKey, setGeminiKey] = useState('');
   const [extractionMode, setExtractionMode] = useState<'regex' | 'gemini'>('regex');
   const [simulateEtmf500, setSimulateEtmf500] = useState(false);
+  const [simulatePartialEtmf500, setSimulatePartialEtmf500] = useState(false);
   const [simulateRegistry500, setSimulateRegistry500] = useState(false);
 
   // Accordions / Tabs
@@ -74,6 +75,7 @@ export default function App() {
         body: JSON.stringify({
           reports,
           simulate_etmf_500: simulateEtmf500,
+          simulate_partial_etmf_500: simulatePartialEtmf500,
           simulate_registry_500: simulateRegistry500,
           prefer_ai_studio: extractionMode === 'gemini',
           gemini_key: geminiKey || undefined,
@@ -422,10 +424,30 @@ export default function App() {
                       id="sim-etmf-check"
                       type="checkbox"
                       checked={simulateEtmf500}
-                      onChange={(e) => setSimulateEtmf500(e.target.checked)}
+                      onChange={(e) => {
+                        setSimulateEtmf500(e.target.checked);
+                        if (e.target.checked) setSimulatePartialEtmf500(false);
+                      }}
                       className="mt-0.5 rounded text-teal-600 focus:ring-teal-500"
                     />
-                    <span>Simulate eTMF Document API (HTTP 500)</span>
+                    <span>Simulate Complete eTMF Outage (HTTP 500)</span>
+                  </label>
+
+                  <label className="flex items-start gap-2 text-xs text-stone-700 cursor-pointer bg-amber-50/60 p-1.5 rounded border border-amber-200/70">
+                    <input
+                      id="sim-partial-etmf-check"
+                      type="checkbox"
+                      checked={simulatePartialEtmf500}
+                      onChange={(e) => {
+                        setSimulatePartialEtmf500(e.target.checked);
+                        if (e.target.checked) setSimulateEtmf500(false);
+                      }}
+                      className="mt-0.5 rounded text-amber-600 focus:ring-amber-500"
+                    />
+                    <div>
+                      <span className="font-semibold text-amber-950">Partial eTMF Outage (15:00 Curveball)</span>
+                      <p className="text-[10px] text-amber-800">11 of 20 reports retrieved; 9 fail with 500s</p>
+                    </div>
                   </label>
 
                   <label className="flex items-start gap-2 text-xs text-stone-700 cursor-pointer">
@@ -580,6 +602,17 @@ export default function App() {
                     )}
                   </button>
                 </div>
+
+                {/* Critical Data Completeness Warning (15:00 Curveball) */}
+                {output.data_completeness_warning && (
+                  <div className="bg-amber-50 border border-amber-300 text-amber-950 p-4 rounded-xl text-xs flex items-start gap-3 shadow-xs">
+                    <AlertTriangle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-bold text-sm text-amber-900 mb-0.5">⚠️ Data Completeness & Denominator Disclosure (15:00 Curveball Defense)</div>
+                      <p className="leading-relaxed text-amber-900 font-medium">{output.data_completeness_warning}</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Exclusions Expander (Pre-processing Gate) */}
                 {output.exclusions && output.exclusions.length > 0 && (

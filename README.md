@@ -25,7 +25,7 @@ In accordance with FDE scope discipline, this repository builds a single **thin 
    - `verbatim_sentence`
 4. **Grouping**: Observations grouped by `site_id` and categorized into standard clinical monitoring `theme`s, explicitly presenting a **same-theme-across-visits view** for recurring signals at a given site.
 5. **Reviewer Packet Assembly**: Structured reviewer packet (JSON and plain-text markdown) presented to human clinical monitors.
-6. **Graceful Degradation (Curveball 3 resilience)**: Resilient fallback handling when upstream dependencies (eTMF / Site Registry) experience service degradation (500s), reporting partial results without crashing.
+6. **Graceful Degradation & Denominator Disclosure (Curveball 3 resilience)**: Resilient fallback handling when upstream dependencies (eTMF / Site Registry) experience service degradation (500s). For partial outages (e.g. 11 of 20 reports retrieved), the pipeline prevents false reassurance from missing data by mandating denominator disclosures (`reports_retrieved` of `reports_expected`), per-site coverage ratios, and statutory completeness warnings without crashing or infinite retries.
 
 ---
 
@@ -90,5 +90,5 @@ In accordance with sprint requirements, all AI-generated code and documentation 
 
 - **AI Proposal**: Initially, the assistant suggested adding a `"severity_level": "HIGH / MEDIUM / LOW"` field to candidate observations.
 - **Human Review Decision**: **Rejected.** Under Caldera's governance charter, adding a severity tier is a pseudo-score that risks drifting into GxP validation territory. Observations remain strictly unranked with neutral theme categorizations.
-- **AI Proposal**: The assistant proposed retrying external API calls 5 times with exponential backoff for the 15:00 curveball.
-- **Human Review Decision**: **Overridden.** A retry loop is not a degradation strategy. The pipeline was modified to catch 500s immediately, log the dependency failure to the audit trail, and assemble a partial review packet with an explicit notice to the clinical reviewer.
+- **AI Proposal**: The assistant proposed retrying external API calls 5 times with exponential backoff for the 15:00 curveball (eTMF 500 for a subset of studies).
+- **Human Review Decision**: **Overridden.** A retry loop is not a degradation strategy. Furthermore, silently returning a partial review packet based on 11 of 20 reports creates a dangerous clinical trap where reviewers draw false reassurance of "clean conduct" from unread visits. The pipeline was modified to catch 500s, mandate denominator disclosures (`reports_retrieved` of `reports_expected`), compute per-site coverage ratios, and surface a statutory warning: *"Absence of evidence is not evidence of absence."*

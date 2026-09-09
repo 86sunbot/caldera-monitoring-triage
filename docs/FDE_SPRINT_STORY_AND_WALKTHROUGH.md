@@ -125,21 +125,25 @@ During the sprint, 3 surprise interruptions landed:
 - **Our Solution ([docs/governance/sponsor-update.md](sponsor-update.md)):**
   - We gave a 5-minute Level 5 pitch: *"The competitor hasn't beaten us—**they are sitting on an uninspected regulatory time bomb**. If an FDA auditor asks how a site was chosen and they show an unvalidated AI score, it triggers an immediate violation warning (Form 483). What we built is safe, keeps us outside the 12-month GxP delay, and delivers working triage this quarter."*
 
-### Curveball 3 (3:00 PM) — The Server 500 Outage
-- **The Challenge:** An upstream external service starts returning `HTTP 500 Server Error`.
+### Curveball 3 (3:00 PM) — Drop 3 of 3: eTMF Document API Failing (HTTP 500 for a Subset of Studies)
+- **The Challenge:** The vendor's eTMF retrieval endpoint returns HTTP 500 for a subset of studies (degraded performance in some regions, no ETA). In our session, only 11 of 20 reports can be retrieved.
+- **Where This Bites:** A grouping view built on 11 of 20 reports looks identical to one built on 20! A clinical reviewer looking at a site with zero issues would draw conclusions from the gaps and assume clean hospital conduct, when in reality half the visits were never retrieved ("Three visits mention this" is very different when you could only read half the visits).
 - **Our Solution ([tests/test_curveball_degradation.py](../../tests/test_curveball_degradation.py)):**
-  - **Graceful Degradation:** Instead of crashing in an infinite retry loop, our code catches the 500, changes status to **`DEGRADED`**, displays a clear warning to the monitor, and enforces a **fail-closed** regional hold so unverified files are never leaked. Logged as **R-04** in the risk register.
+  - **Defensible Degraded Behavior:** The pipeline does not crash or enter an infinite retry loop. It processes the 11 retrieved documents, marks `system_status = "DEGRADED"`, and sets `is_partial_dataset = True`.
+  - **Mandatory Denominator Disclosure:** Renders an unavoidable amber warning: *"DATA COMPLETENESS & DENOMINATOR DISCLOSURE: ABSENCE OF EVIDENCE IS NOT EVIDENCE OF ABSENCE. 11 of 20 reports retrieved. Conclusions regarding clean site conduct cannot be drawn for unretrieved visits."*
+  - **Per-Site Coverage Tracking:** Displays exact coverage ratios for every hospital (e.g. `Site 101: 3 of 6 reports processed - PARTIAL`).
+  - **Audit Evidence:** Automated test `test_partial_etmf_outage_coverage_disclosure` verifies the degradation contract and is mapped to risk **R-04** in `risk-register.md`.
 
 ---
 
 ## 🚀 Step 5: Verification, GitHub, and Google AI Studio
 
-1. **Automated Testing:** 8 tests passing with 100% core coverage (`pytest tests/ -v`).
+1. **Automated Testing:** 9 tests passing with 100% core coverage (`pytest tests/ -v`).
 2. **GitHub Repository:** Full code and governance pack pushed to **[https://github.com/86sunbot/caldera-monitoring-triage](https://github.com/86sunbot/caldera-monitoring-triage)**.
 3. **Live Google AI Studio UI:** Imported into Google AI Studio, rendering a live web application with:
    - One-click triage execution.
-   - Built-in **Curveball 3 Simulator** checkboxes (simulate HTTP 500 on eTMF or Site Registry).
-   - Real-time regional exclusion logs and same-theme visit views.
+   - Built-in **Curveball 3 Simulator** checkboxes (simulate partial eTMF 500 outage, total eTMF outage, or Site Registry failure).
+   - Real-time regional exclusion logs, same-theme visit views, and data completeness denominator disclosures.
 
 ---
 
@@ -149,13 +153,13 @@ When your mentors ask you to present:
 
 1. **Show the Working Slice (3 mins):**
    - Open your live Google AI Studio app and click **Run Clinical Monitoring Triage**.
-   - Show Site 404 dropped by the regional compliance gate.
+   - Show Site 404 dropped by the regional compliance gate before parsing.
    - Show Site 101 displaying recurring informed consent issues across 6 visits with exact page numbers.
 2. **Show the Governance & Curveball Defense (4 mins):**
    - Open `risk-register.md`: *"Every single risk points to a real test in our repo, not promises."*
-   - Check the **Simulate HTTP 500** checkbox in the UI and click Run: *"When the server failed at 15:00, we didn't retry and crash. We degraded gracefully and protected data sovereignty."*
+   - Check the **Partial eTMF Outage (15:00 Curveball - 11/20 Docs)** checkbox in the UI and click Run: *"When the vendor failed on half the studies at 15:00, we didn't retry and crash, and we didn't silently hide the missing data. We displayed the denominator (11 of 20) and warned the reviewer that absence of evidence is not evidence of absence."*
 3. **Name What You Would Do Next (3 mins):**
-   - *"In Phase 2, we will build the OCR pipeline for the 8% scanned paper reports we deferred today, and work with the DPO on transfer agreements for the restricted sites."*
+   - *"In Phase 2, we will build the OCR pipeline for the 8% scanned paper reports we deferred today under R-06, and work with the DPO on transfer agreements for the restricted sites."*
 
 ---
 
@@ -166,5 +170,5 @@ When your mentors ask you to present:
 | **1. DISCOVER** | **01–04** | Field immersion into CRA workflows; triaged regulations to reject predictive risk scoring and avoid 9–12 months of GxP CSV. |
 | **2. DEFINE** | **05–08** | Modeled domain in `models.py`; enforced EDC data firewall; authored ISO 42001 impact assessment; selected deterministic sentence extraction. |
 | **3. DESIGN** | **09–13** | Designed Same-Theme-Across-Visits view; built regional compliance gate; authored CISO threat model; approved ADR-001 and ADR-002. |
-| **4. DELIVER** | **14–17** | Built Python backend, CLI, and Web UI; verified with 8 automated tests; mapped ISO 42001 evidence; pushed to GitHub and Google AI Studio. |
-| **5. OPERATE & IMPROVE** | **18–21** | Proved Curveball 3 resilience on 500 errors; delivered 13:00 sponsor pitch; enforced non-GxP lifecycle boundary; captured Phase 2 OCR backlog. |
+| **4. DELIVER** | **14–17** | Built Python backend, CLI, and Web UI; verified with 9 automated tests; mapped ISO 42001 evidence; pushed to GitHub and Google AI Studio. |
+| **5. OPERATE & IMPROVE** | **18–21** | Proved Curveball 3 resilience on partial and complete 500 errors; delivered 13:00 sponsor pitch; enforced non-GxP lifecycle boundary; captured Phase 2 OCR backlog. |

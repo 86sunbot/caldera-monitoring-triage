@@ -58,14 +58,20 @@
 
 ## Part 3: Live Demo — Curveballs in Action (4:00 – 6:30)
 
-### 1. Demonstrate Curveball 3 (Server 500 Outage — LIVE!):
+### 1. Demonstrate Curveball 3 (Partial eTMF 500 Outage — LIVE!):
 **Action:** 
-1. Check the box: **`Simulate eTMF Document API (HTTP 500)`**.
+1. Check the box: **`Partial eTMF Outage (15:00 Curveball - 11/20 Docs)`**.
 2. Click the green button: **`▶ Run Clinical Monitoring Triage`**.
 
 **What to Say:**
-> *"At 3:00 PM, an external server broke and started returning HTTP 500 errors. Most teams write an infinite retry loop that freezes and crashes.  
-> Watch our screen: the status cleanly changes to **`System Status: DEGRADED`**. It warned the user, safely held unverified files in staging, and stayed online without crashing. A retry loop is not a degradation strategy; this is."*
+> *"At 3:00 PM, Drop 3 hit: the vendor's eTMF API began failing with HTTP 500 for a subset of studies. We could only retrieve 11 of 20 reports.*  
+>  
+> *Where this bites is insidious: a grouping view built on 11 reports looks identical to one built on 20! A doctor or clinical monitor would look at a hospital with zero findings and falsely assume clean hospital conduct, when in reality half the visits were never retrieved.*  
+>  
+> *Look at our screen: the system does not crash or enter an infinite retry loop. Instead, it enters **`System Status: DEGRADED`** with a non-negotiable amber banner:*  
+> *'DATA COMPLETENESS & DENOMINATOR DISCLOSURE: ABSENCE OF EVIDENCE IS NOT EVIDENCE OF ABSENCE. Conclusions regarding clean site conduct cannot be drawn for unretrieved visits.'*  
+>  
+> *And look at Site 101: it explicitly displays **`Coverage: 3 of 6 reports processed - PARTIAL`**. That is defensible degraded behavior that protects patient trial integrity."*
 
 *(Uncheck the box and click Run once more to return to green).*
 
@@ -87,7 +93,7 @@
 > *"At 1:00 PM, our sponsor had FOMO because a competitor claimed to have an AI risk-scoring model running for 8 months.  
 > We gave a Level 5 reframe: that competitor is sitting on an uninspected regulatory liability. If an FDA auditor asks them how a site was chosen, an unvalidated AI score results in an immediate Form 483 inspection warning. What we built for Caldera is safe, unranked, and inspection-ready today.*  
 >  
-> *In our risk register, every single risk marked as **Treated** (R-01 to R-07) points to a real test in our repository. We have 8 automated tests running in GitHub CI with 100% core coverage."*
+> *In our risk register, every single risk marked as **Treated** (R-01 to R-07) points to a real test in our repository. We have 9 automated tests running in GitHub CI with 100% core coverage."*
 
 ---
 
@@ -113,4 +119,4 @@
 | :--- | :--- |
 | **"Why didn't you add High / Low risk tags?"** | *"Because in clinical trials, a risk tag is a pseudo-score under 21 CFR Part 11, triggering 9 to 12 months of legal validation delay. We leave prioritization to the human monitor."* |
 | **"Where is the code proof for patient data rejection?"** | *"In `tests/test_controls.py`, test `test_edc_boundary_enforced`. It deliberately feeds patient data and proves the system blocks it."* |
-| **"What did you do when the API failed at 15:00?"** | *"We returned status DEGRADED, held unverified files in staging, and tracked it as risk R-04 with tests in `tests/test_curveball_degradation.py`."* |
+| **"What did you do when the eTMF API failed at 15:00?"** | *"The vendor returned 500 for a subset of studies (11 of 20 retrieved). A grouping view built on 11 reports looks identical to one on 20, which tempts reviewers to draw false reassurance about site conduct. We handled it gracefully: returned status DEGRADED, calculated coverage denominators ('3 of 6 reports - PARTIAL'), and emitted a mandatory warning: 'Absence of evidence is not evidence of absence.' Proved by `test_partial_etmf_outage_coverage_disclosure` under risk R-04."* |

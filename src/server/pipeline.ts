@@ -110,16 +110,27 @@ export class SiteRegistryClient {
 
 export class ETMFClient {
   private simulate500: boolean;
+  private simulatePartial500: boolean;
+  private successfulDocLimit: number;
 
-  constructor(simulate500 = false) {
+  constructor(simulate500 = false, simulatePartial500 = false, successfulDocLimit = 11) {
     this.simulate500 = simulate500;
+    this.simulatePartial500 = simulatePartial500;
+    this.successfulDocLimit = successfulDocLimit;
   }
 
   fetchReports(rawReportsData: Array<Record<string, unknown>>): MonitoringReport[] {
     if (this.simulate500) {
       throw new Error('HTTP 500: eTMF Document Gateway Internal Server Error');
     }
-    return rawReportsData.map((item) => validateMonitoringReport(item));
+    const reports: MonitoringReport[] = [];
+    for (let idx = 0; idx < rawReportsData.length; idx++) {
+      if (this.simulatePartial500 && idx >= this.successfulDocLimit) {
+        continue;
+      }
+      reports.push(validateMonitoringReport(rawReportsData[idx]));
+    }
+    return reports;
   }
 }
 
@@ -321,6 +332,13 @@ export class MonitoringTriagePipeline {
     const exclusions: ExclusionRecord[] = [];
     let reports: MonitoringReport[] = [];
 
+    const reportsExpected = rawReportsData.length;
+    const siteExpectedCount = new Map<string, number>();
+    for (const raw of rawReportsData) {
+      const sId = String(raw.site_id || 'UNKNOWN');
+      siteExpectedCount.set(sId, (siteExpectedCount.get(sId) || 0) + 1);
+    }
+
     // 1. Ingress via eTMF (Resilience Gate)
     try {
       reports = this.etmfClient.fetchReports(rawReportsData);
@@ -335,10 +353,32 @@ export class MonitoringTriagePipeline {
         system_status: systemStatus,
         disclaimer:
           'CALDERA CLINICAL OPS TRIAGE AID: Informational surfacing only. Not a predictive score, not a regulatory deviation record. All clinical actions require human evaluation by an authorized clinical monitor.',
+        reports_expected: reportsExpected,
+        reports_retrieved: 0,
+        is_partial_dataset: true,
+        data_completeness_warning: 'CRITICAL: Complete eTMF Document Gateway outage (HTTP 500). Zero documents retrieved.',
         processed_sites: [],
         exclusions: [],
         degradation_notices: degradationNotices,
       };
+    }
+
+    const reportsRetrieved = reports.length;
+    const isPartialDataset = reportsRetrieved < reportsExpected;
+    let dataCompletenessWarning: string | null = null;
+
+    if (isPartialDataset) {
+      systemStatus = 'DEGRADED';
+      const missingCount = reportsExpected - reportsRetrieved;
+      degradationNotices.push(
+        `VENDOR SERVICE NOTICE: eTMF Document API degraded (HTTP 500). ` +
+        `Partial retrieval: ${reportsRetrieved} of ${reportsExpected} reports retrieved (${missingCount} failed).`
+      );
+      dataCompletenessWarning =
+        `⚠️ DEGRADED REVIEW PACKET (PARTIAL DATASET): Only ${reportsRetrieved} of ${reportsExpected} reports ` +
+        'were retrieved due to upstream vendor HTTP 500 errors. ' +
+        'ABSENCE OF EVIDENCE IS NOT EVIDENCE OF ABSENCE: Conclusions regarding clean site conduct ' +
+        'or lack of deviations cannot be drawn for unretrieved monitoring visits.';
     }
 
     // 2. Regional Compliance Gate (ISO 42001 A.7 Data Control)
@@ -419,10 +459,16 @@ export class MonitoringTriagePipeline {
       // Sort themes alphabetically (STRICTLY NO RANKING OR SCORES)
       themeViews.sort((a, b) => a.theme.localeCompare(b.theme));
 
+      const processedCount = siteReportsCount.get(siteId)?.size || 0;
+      const expectedCount = siteExpectedCount.get(siteId) || processedCount;
+
       processedSites.push({
         site_id: siteId,
         country,
-        total_reports_processed: siteReportsCount.get(siteId)?.size || 0,
+        total_reports_processed: processedCount,
+        total_reports_expected: expectedCount,
+        coverage_ratio: `${processedCount} of ${expectedCount} reports`,
+        is_partial_coverage: processedCount < expectedCount,
         themes: themeViews,
       });
     }
@@ -435,6 +481,10 @@ export class MonitoringTriagePipeline {
       system_status: systemStatus,
       disclaimer:
         'CALDERA CLINICAL OPS TRIAGE AID: Informational surfacing only. Not a predictive score, not a regulatory deviation record. All clinical actions require human evaluation by an authorized clinical monitor.',
+      reports_expected: reportsExpected,
+      reports_retrieved: reportsRetrieved,
+      is_partial_dataset: isPartialDataset,
+      data_completeness_warning: dataCompletenessWarning,
       processed_sites: processedSites,
       exclusions,
       degradation_notices: degradationNotices,

@@ -54,7 +54,11 @@ async function startServer() {
       const body: TriageRequestPayload = req.body || {};
       const rawReports = body.reports && body.reports.length > 0 ? body.reports : getSampleReports();
 
-      const etmfClient = new ETMFClient(Boolean(body.simulate_etmf_500));
+      const etmfClient = new ETMFClient(
+        Boolean(body.simulate_etmf_500),
+        Boolean(body.simulate_partial_etmf_500),
+        11
+      );
       const registryClient = new SiteRegistryClient(Boolean(body.simulate_registry_500));
 
       const apiKey = body.gemini_key || process.env.GEMINI_API_KEY;
