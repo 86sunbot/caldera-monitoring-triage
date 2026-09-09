@@ -135,3 +135,38 @@ def test_verbatim_sentence_and_page_provenance():
     assert obs.citation.document_id == "MVR-VERIFY-01"
     assert obs.citation.page_number == 4
     assert obs.citation.verbatim_sentence == "Fridge log indicated a temporary temperature excursion of +12C over the weekend."
+
+
+def test_ai_studio_client_fallback_when_unconfigured():
+    """
+    EVIDENCE FOR AI STUDIO RESILIENCE & ISO 42001 A.10:
+    Proves that if Google AI Studio is preferred but unconfigured (no API key),
+    the system logs a warning and falls back safely to the deterministic regex engine.
+    """
+    from src.clients.ai_studio_client import GoogleAIStudioClient
+    from src.pipeline.extractor import ClinicalObservationExtractor
+
+    unconfigured_client = GoogleAIStudioClient(api_key="")
+    assert unconfigured_client.is_configured() is False
+
+    extractor = ClinicalObservationExtractor(
+        ai_studio_client=unconfigured_client,
+        prefer_ai_studio=True
+    )
+
+    sample_doc = [{
+        "document_id": "MVR-AI-FALLBACK-01",
+        "site_id": "SITE-101",
+        "visit_date": "2024-03-01",
+        "monitor_name": "Verifier CRA",
+        "pages": {
+            "1": "Delegation of authority log missing study coordinator signature."
+        }
+    }]
+    pipeline = MonitoringTriagePipeline(extractor=extractor)
+    output = pipeline.run(sample_doc)
+
+    assert len(output.processed_sites) == 1
+    site = output.processed_sites[0]
+    assert site.themes[0].theme == "Staff Training & Delegation"
+    assert "Delegation of authority" in site.themes[0].observations[0].citation.verbatim_sentence

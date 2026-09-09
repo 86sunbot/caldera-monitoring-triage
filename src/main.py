@@ -53,6 +53,7 @@ def main():
     parser = argparse.ArgumentParser(description="Caldera Clinical Monitoring Triage")
     parser.add_argument("--data", default="data/sample_reports/twenty_reports.json", help="Path to reports JSON")
     parser.add_argument("--format", choices=["json", "markdown"], default="markdown", help="Output format")
+    parser.add_argument("--use-ai-studio", action="store_true", help="Invoke Google AI Studio (Gemini) for extraction")
     args = parser.parse_args()
 
     data_path = Path(args.data)
@@ -63,7 +64,18 @@ def main():
     with open(data_path, "r") as f:
         raw_data = json.load(f)
 
-    pipeline = MonitoringTriagePipeline()
+    if args.use_ai_studio:
+        from src.clients.ai_studio_client import GoogleAIStudioClient
+        from src.pipeline.extractor import ClinicalObservationExtractor
+
+        ai_client = GoogleAIStudioClient()
+        if not ai_client.is_configured():
+            print("Notice: GEMINI_API_KEY environment variable not set. Falling back to deterministic extraction.")
+        extractor = ClinicalObservationExtractor(ai_studio_client=ai_client, prefer_ai_studio=True)
+        pipeline = MonitoringTriagePipeline(extractor=extractor)
+    else:
+        pipeline = MonitoringTriagePipeline()
+
     output = pipeline.run(raw_data)
 
     if args.format == "json":

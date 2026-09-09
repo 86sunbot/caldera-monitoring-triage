@@ -34,20 +34,35 @@ THEME_PATTERNS = {
 
 
 class ClinicalObservationExtractor:
-    """Extracts candidate signals from digital monitoring report text."""
+    """
+    Extracts candidate signals from digital monitoring report text.
+    Supports Google AI Studio (Gemini) when configured, with seamless
+    fallback to deterministic regex extraction.
+    """
+
+    def __init__(self, ai_studio_client=None, prefer_ai_studio: bool = False):
+        self.ai_studio_client = ai_studio_client
+        self.prefer_ai_studio = prefer_ai_studio
 
     def extract_from_report(self, report: MonitoringReport) -> List[CandidateObservation]:
+        # 1. Try Google AI Studio if enabled and configured
+        if self.prefer_ai_studio and self.ai_studio_client and self.ai_studio_client.is_configured():
+            try:
+                return self.ai_studio_client.extract_candidates(report)
+            except Exception as err:
+                # Log degradation and fall back to deterministic engine
+                print(f"[AI Studio Degradation Warning] Falling back to deterministic extractor: {err}")
+
+        # 2. Deterministic Regex Extraction (Default / Fallback)
         observations: List[CandidateObservation] = []
 
         for page_num, page_text in report.pages.items():
-            # Split page text into discrete sentences while preserving exact phrasing
             sentences = re.split(r"(?<=[.!?])\s+", page_text.strip())
             for sentence in sentences:
                 sentence_clean = sentence.strip()
                 if not sentence_clean:
                     continue
 
-                # Check if sentence matches known clinical monitoring themes
                 for theme, patterns in THEME_PATTERNS.items():
                     if any(re.search(pat, sentence_clean, re.IGNORECASE) for pat in patterns):
                         obs = CandidateObservation(
@@ -62,6 +77,6 @@ class ClinicalObservationExtractor:
                             )
                         )
                         observations.append(obs)
-                        break  # One theme per sentence candidate to avoid duplication
+                        break
 
         return observations
