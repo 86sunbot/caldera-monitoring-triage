@@ -8,7 +8,8 @@
 > **Operating Philosophy**: *Surfacing, Not Predicting.*  
 > This system ingests clinical monitoring visit reports, extracts candidate observations with verbatim source attribution (document ID, page number, sentence), groups them by site and theme, and presents an unranked review packet to a human clinical reviewer.
 
-📖 **New here?** Read the complete plain-English walkthrough: **[`docs/FDE_SPRINT_STORY_AND_WALKTHROUGH.md`](docs/FDE_SPRINT_STORY_AND_WALKTHROUGH.md)** — explaining the client problem, the GxP legal trap, our code architecture, the 3 curveballs, and our 16:15 demo script.
+📖 **New here?** Read the complete plain-English walkthrough: **[`docs/FDE_SPRINT_STORY_AND_WALKTHROUGH.md`](docs/FDE_SPRINT_STORY_AND_WALKTHROUGH.md)** — explaining the client problem, the GxP legal trap, our code architecture, the 3 curveballs, and our 16:15 demo script.  
+🎤 **Demo with Trainer?** Follow the step-by-step 10-minute script: **[`docs/DEMO_PRESENTATION_SCRIPT.md`](docs/DEMO_PRESENTATION_SCRIPT.md)** — screen actions, spoken dialogue, and Q&A cheat sheet.
 
 ---
 
