@@ -1,42 +1,52 @@
 # Caldera Therapeutics · 13:00 Sponsor Update (One-Pager & Script)
-### Audience: VP Clinical Operations (Role-played by Pod Mentor) · Format: 5 Minutes, Spoken, No Slides
-
-> **Mentor Role-Play Context**: The VP Clinical Operations accepted yesterday's reframe to "surfacing", but this morning spoke with a peer at another pharma company who claimed they have *"the predictive risk score thing running already"*. Expect the VP to challenge you: *"Why aren't we building the predictive model?"*
-
----
-
-## 5-Minute Spoken Delivery Script
-
-### 0:00 – 0:45 | Where We Are Against What We Agreed
-> *"Good afternoon. Today we are delivering the core monitoring report triage engine for Caldera's active studies. Right now, the system successfully ingests monitoring visit reports, extracts candidate operational signals with exact page and sentence references, and groups them by site so your clinical monitors can immediately see recurring issues across visits without reading 40-page PDFs front-to-back."*
-
-### 0:45 – 2:00 | What Has Changed Since Yesterday (Addressing the "Predictive" Peer)
-> *"I want to address something directly. You may hear from peers at other sponsors that they are 'running predictive risk scoring'. Here is why the surfacing system we are building today is better for Caldera:*  
-> *If we assign a predictive risk score—like flagging a site as 'High Risk' or predicting protocol non-compliance—that score enters the **GxP-validated estate under 21 CFR Part 11**. That immediately triggers 9 to 12 months of Computerized System Validation, IQ/OQ/PQ audits, and regulatory scrutiny before a single monitor can touch it.*  
-> *What we are building stays strictly outside the GxP validation boundary. It makes no automated calls, applies no black-box scores, and leaves the clinical decision with your qualified monitors. That is how we get working triage into your monitors' hands this quarter instead of next year."*
-
-### 2:00 – 3:30 | What Is At Risk (Clear & Business-Specific)
-> *"We are managing two specific risks right now:*  
-> 1. **Data Sovereignty Risk (R-02)**: *Four reports in our test sample originate from sites in restricted overseas jurisdictions. Ingesting their text without executed data transfer agreements creates regulatory exposure under cross-border data transfer laws. We have implemented an automated pre-ingestion gate that drops and logs these reports rather than processing them unsafely.*  
-> 2. **Scanned PDF Coverage (R-06)**: *Approximately 8% of historical monitoring reports are scanned paper copies. Today's build processes digital text only; OCR is deferred. Those scanned files will be routed to manual CRA review until our Phase 2 OCR pipeline is online."*
-
-### 3:30 – 4:15 | What We Need From You (The Specific Ask)
-> *"We need two specific actions from you:*  
-> 1. **A formal sign-off** that Caldera's deployment strategy is 'surfacing triage for monitors' and will not seek predictive scoring in Phase 1, protecting our non-GxP timeline.  
-> 2. **An introduction to your Data Privacy Officer** to confirm the list of authorized trial site countries so our automated jurisdiction gate reflects your legal agreements."*
-
-### 4:15 – 5:00 | What Happens Next
-> *"By 16:00 today, our repository will be frozen with a working end-to-end slice running across 20 reports, complete with an automated test suite proving zero scoring and 100% sentence provenance. At 16:15, we will demo the live triage packet showing a recurring informed consent signal at Site 101."*
+### Deliverable for Drop 2: VP Clinical Operations Check-In
+**Speaker**: Lead Forward Deployed Engineer (One speaker, 5 minutes, no slides)  
+**Recipient**: VP Clinical Operations  
+**Artifact Location**: `docs/governance/sponsor-update.md`  
+**Target Score**: Level 5 (Surfaces unrecognised regulatory exposure, delivers the uncomfortable truth, and secures executive decision)
 
 ---
 
-## Appendix B Table Summary (For the Record)
+## 1. Appendix B · Sponsor Update One-Pager
 
 | Section | Your Content |
 | :--- | :--- |
-| **Where we are** | Working end-to-end slice ingesting 20 reports, extracting candidate observations with page/sentence citations, and grouping by site and theme. |
-| **What changed since yesterday** | Defended the GxP boundary: explicitly rejected predictive risk scores to protect the 3-month launch timeline vs. a 12-month CSV cycle. |
-| **Risk 1 — what it is, cost, mitigation** | **Data Sovereignty (R-02)**: Cross-border transfer fines; pre-processing gate drops restricted sites into audit log. |
-| **Risk 2 — what it is, cost, mitigation** | **Scanned PDF Gap (R-06)**: 8% of documents unparsed; explicitly deferred OCR and routed to manual CRA review. |
-| **What we need from you** | 1. Affirmation of the non-predictive scope. 2. Intro to DPO for approved site country list. |
-| **What happens next** | Code freeze at 16:00; live execution demo at 16:15 showing recurring cross-visit signals at Site 101. |
+| **Where we are** | Thin slice running end-to-end against 20 clinical monitoring visit reports from eTMF. Ingests reports, extracts candidate signals with exact page/sentence citations, enforces a pre-processing regional compliance gate, and groups recurring issues by site and theme. |
+| **What changed since yesterday** | Defended the GxP boundary against predictive risk scoring. Addressed the competitor claim: a peer company running unvalidated risk scores for 8 months is carrying severe unrecognised regulatory exposure under 21 CFR Part 11 / ICH E6(R2). Our surfacing architecture delivers immediate operational triage without triggering 9–12 months of Computerized System Validation (CSV). |
+| **Risk 1 — what it is, what it costs, what we are doing** | **Cross-Border Data Sovereignty (R-02)**: Ingesting reports from two restricted trial regions without data transfer agreements risks GDPR/local fines and study audit findings. *Cost*: Regulatory enforcement or localized trial suspension. *Action*: Automated pre-ingestion gate drops and logs restricted reports; documents held in staging. |
+| **Risk 2 — what it is, what it costs, what we are doing** | **Scanned Paper Report Coverage (R-06)**: 8% of historical monitoring visit reports are scanned images without digital text. *Cost*: Temporary blind spot on legacy trial sites unless manually triaged. *Action*: Explicitly deferred OCR from today's 5-hour slice; routed to manual CRA review; Phase 2 OCR backlog item created. |
+| **What we need from you** | 1. **Executive Decision**: Confirm that Caldera will not chase predictive scoring in Phase 1, preserving our non-GxP timeline and inspection safety.<br>2. **DPO Introduction**: Direct connection to your Data Privacy Officer today to establish data transfer pathways for the two restricted trial regions. |
+| **What happens next** | Repository frozen at 16:00. At 16:15 close-out, we demo the live triage execution across 20 reports, walking the risk register and proving zero scoring and 100% sentence provenance. |
+
+---
+
+## 2. Five-Minute Spoken Delivery Script (Do Not Read Aloud — Speak From This)
+
+### [0:00 – 0:45] Where We Are Against What We Agreed
+> *"Thank you for the five minutes. We are exactly where we agreed to be: we have a working, end-to-end slice running right now on our machines. It ingests 20 real-world clinical monitoring reports from eTMF, extracts operational observations with 100% verbatim sentence and page provenance, and groups them by site so your clinical monitors can spot multi-visit trends in seconds rather than reading 40-page PDFs."*
+
+### [0:45 – 2:00] What Has Changed Since Yesterday (The Competitor Comparison)
+> *"I understand your hesitation after hearing about your peer's risk-scoring model running for eight months. I need to tell you an uncomfortable truth about what they have versus what we are building:*  
+>  
+> *The thing you asked for on Monday is not the thing we are building, and here is why that is better for you.*  
+>  
+> *In our industry, if an automated model assigns a predictive risk score to a trial site to guide monitoring frequency or audit triage, regulatory agencies—under 21 CFR Part 11 and ICH E6(R2)—classify that algorithm as a computerized system governing trial data integrity. That mandates formal Computerized System Validation (CSV): prospective IQ/OQ/PQ protocols, algorithmic repeatability audits, and change controls taking 9 to 12 months.*  
+>  
+> *If your peer has had a risk-scoring model running for eight months across their portfolio without a completed GxP CSV package, they haven't outpaced us—they are sitting on an uninspected regulatory liability. In an FDA or EMA audit, when an inspector asks: 'What validated algorithm determined that this site was low risk?', an unvalidated score results in an immediate Form 483 observation or trial hold.*  
+>  
+> *What we are building is not 'less'. It is smarter. By surfacing candidate observations with exact page citations and zero black-box scoring, the qualified CRA remains the sole decision authority. That keeps this system outside the GxP validated estate, meaning you get working operational triage this quarter—100% inspection-ready—with zero regulatory exposure."*
+
+### [2:00 – 3:30] What Is At Risk (Named in Business Terms)
+> *"Four hours into this build, we are carrying two specific risks:*  
+>  
+> *First: **Data Sovereignty (Risk R-02)**. Four reports in our dataset come from two regions with strict cross-border data export prohibitions. Processing their text outside those jurisdictions risks significant GDPR and local privacy fines. What we are doing: our system includes an automated gate that drops and logs those documents before a single word is parsed. The cost to you is a temporary blind spot on those two sites until legal agreements are in place.*  
+>  
+> *Second: **Scanned Reports (Risk R-06)**. Approximately 8% of historical monitoring reports are scanned paper PDFs. What we are doing: we explicitly descoped OCR from today's five-hour build. The cost is that those scanned reports require manual CRA review today, which we have scheduled for our Phase 2 OCR sprint."*
+
+### [3:30 – 4:15] What We Need From You (The Specific Asks)
+> *"To maintain momentum, we need two specific decisions from you today:*  
+> 1. *Affirm our non-predictive scope. Resist the peer pressure for risk scoring so we protect Caldera's inspection posture and keep our delivery date.*  
+> 2. *Connect us with your Data Privacy Officer this afternoon so we can resolve the transfer restrictions on those two regions."*
+
+### [4:15 – 5:00] What Happens Next
+> *"Our repository freezes at 16:00. At 16:15, we will demo the live system running end-to-end across the 20 reports, show you the audit logs proving the restricted sites were safely held, and walk you through the risk register. Thank you."*

@@ -20,6 +20,27 @@ class MonitoringReport(BaseModel):
     monitor_name: str = Field(..., description="Clinical Research Associate (CRA) name")
     pages: Dict[int, str] = Field(..., description="Page number to text content mapping")
 
+    @model_validator(mode="before")
+    @classmethod
+    def enforce_edc_boundary(cls, data: dict):
+        """
+        GOVERNANCE CONTROL (CISO Question 2 & ISO 42001 A.7):
+        EDC Boundary Enforcement.
+        Rejects any attempt to pass Electronic Data Capture (EDC) subject-level
+        clinical data (e.g. lab results, adverse event terms, subject identifiers).
+        """
+        edc_forbidden_keys = [
+            "edc_id", "subject_dob", "subject_initials", "randomization_code",
+            "lab_results", "adverse_event_term", "concomitant_meds", "crf_data"
+        ]
+        for key in data.keys():
+            if any(forbidden in key.lower() for forbidden in edc_forbidden_keys):
+                raise ValueError(
+                    f"EDC Boundary Violation: Ingestion of EDC field '{key}' is strictly forbidden. "
+                    "System only ingests eTMF monitoring visit reports, not subject-level clinical data."
+                )
+        return data
+
 
 class SourceCitation(BaseModel):
     """Verbatim grounding citation for auditability (ISO 42001 A.8)."""

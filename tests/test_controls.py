@@ -18,6 +18,7 @@ def test_region_restriction_gate_fires():
     EVIDENCE FOR R-02 & ISO 42001 A.7 (Data Control):
     Proves that documents originating from region-restricted jurisdictions
     are rejected before content extraction and recorded in the audit exclusion log.
+    Specifically verifies that the model/extractor is NEVER invoked for restricted files.
     """
     registry = SiteRegistryClient()
     is_restricted, country, reason = registry.is_region_restricted("SITE-404")
@@ -33,13 +34,46 @@ def test_region_restriction_gate_fires():
         "monitor_name": "Auditor Test",
         "pages": {"1": "This text must never be parsed or extracted."}
     }]
-    pipeline = MonitoringTriagePipeline(site_registry=registry)
+    
+    # Spy on extractor to prove it is NEVER invoked on restricted docs
+    class SpyExtractor:
+        def __init__(self):
+            self.invoked = False
+        def extract_from_report(self, report):
+            self.invoked = True
+            return []
+
+    spy = SpyExtractor()
+    pipeline = MonitoringTriagePipeline(site_registry=registry, extractor=spy)
     output = pipeline.run(sample_restricted_doc)
 
     assert len(output.exclusions) == 1
     assert output.exclusions[0].document_id == "MVR-RESTRICTED-001"
     assert output.exclusions[0].site_id == "SITE-404"
     assert len(output.processed_sites) == 0
+    # Technical guarantee: extractor/model was never called
+    assert spy.invoked is False
+
+
+def test_edc_boundary_enforced():
+    """
+    EVIDENCE FOR CISO QUESTION 2 & ISO 42001 A.7:
+    Proves that the ingestion schema actively rejects Electronic Data Capture (EDC)
+    subject-level clinical data, enforcing the architectural boundary in code.
+    """
+    from src.models import MonitoringReport
+
+    # Passing subject-level EDC data must raise validation error
+    with pytest.raises(ValueError, match="EDC Boundary Violation"):
+        MonitoringReport(
+            document_id="MVR-FAIL",
+            site_id="SITE-101",
+            visit_date="2024-01-01",
+            monitor_name="Auditor Test",
+            pages={"1": "Clean page"},
+            subject_initials="J.D.",  # EDC clinical field
+            lab_results="ALT 45 U/L"   # EDC clinical field
+        )
 
 
 def test_zero_scoring_or_ranking():
