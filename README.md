@@ -1,6 +1,10 @@
 # Caldera Therapeutics — Monitoring Report Triage System
 ### Forward Deployed Engineering (FDE) Challenge Build Sprint · Team 2
 
+[![Google AI Studio](https://img.shields.io/badge/Google%20AI%20Studio-Applet%20Live%20Link-teal?logo=google)](https://aistudio.google.com/apps/cc4ffde2-8a28-4c34-92e3-09e9b1bb805a?showAssistant=true&project=metal-contact-364103&showPreview=true)
+
+🔗 **Quick Access**: [Launch Caldera Clinical Monitoring Triage in Google AI Studio](https://aistudio.google.com/apps/cc4ffde2-8a28-4c34-92e3-09e9b1bb805a?showAssistant=true&project=metal-contact-364103&showPreview=true)
+
 > **Operating Philosophy**: *Surfacing, Not Predicting.*  
 > This system ingests clinical monitoring visit reports, extracts candidate observations with verbatim source attribution (document ID, page number, sentence), groups them by site and theme, and presents an unranked review packet to a human clinical reviewer.
 

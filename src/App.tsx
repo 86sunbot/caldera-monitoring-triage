@@ -19,6 +19,7 @@ import {
   Calendar,
   Layers,
   Sparkles,
+  ExternalLink,
 } from 'lucide-react';
 import { TriageOutput, MonitoringReport } from './types';
 
@@ -178,6 +179,17 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2">
+            <a
+              id="ai-studio-quick-link"
+              href="https://aistudio.google.com/apps/cc4ffde2-8a28-4c34-92e3-09e9b1bb805a?showAssistant=true&project=metal-contact-364103&showPreview=true"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-200 rounded-md transition-colors"
+              title="Open applet in Google AI Studio"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-teal-700" />
+              AI Studio Applet
+            </a>
             <button
               id="view-corpus-btn"
               onClick={() => setShowReportsViewer(!showReportsViewer)}
