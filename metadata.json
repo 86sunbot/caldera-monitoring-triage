@@ -1,0 +1,8 @@
+{
+  "name": "Caldera Clinical Monitoring Triage",
+  "description": "Clinical monitoring report triage application for Caldera Therapeutics featuring regional compliance gating, deterministic regex & Gemini extraction, and resilient graceful degradation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
