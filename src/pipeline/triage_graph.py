@@ -137,7 +137,10 @@ class MonitoringTriagePipeline:
         for report in eligible_reports:
             site_reports_count[report.site_id].add(report.document_id)
             extracted = self.extractor.extract_from_report(report)
-            observations_by_site[report.site_id].extend(extracted)
+            verified = [
+                obs for obs in extracted if obs.citation.verify_against_report(report)
+            ]
+            observations_by_site[report.site_id].extend(verified)
 
         # 4. Grouping: By site & theme, generating same-theme-across-visits view
         processed_sites: List[SiteReviewPacket] = []

@@ -58,6 +58,24 @@ export function validateMonitoringReport(data: Record<string, unknown>): Monitor
   return data as unknown as MonitoringReport;
 }
 
+export function verifyCitationAgainstReport(
+  citation: { document_id: string; page_number: number; verbatim_sentence: string },
+  report: MonitoringReport
+): boolean {
+  if (!citation || citation.document_id !== report.document_id) {
+    return false;
+  }
+  const pageKey = String(citation.page_number);
+  if (!Object.prototype.hasOwnProperty.call(report.pages, pageKey)) {
+    return false;
+  }
+  const cleaned = (citation.verbatim_sentence || '').trim();
+  if (!cleaned) {
+    return false;
+  }
+  return report.pages[pageKey].includes(cleaned);
+}
+
 export function validateCandidateObservation(data: Record<string, unknown>): CandidateObservation {
   for (const key of Object.keys(data)) {
     if (SCORING_FORBIDDEN_KEYWORDS.some((forbidden) => key.toLowerCase().includes(forbidden))) {
@@ -67,7 +85,11 @@ export function validateCandidateObservation(data: Record<string, unknown>): Can
       );
     }
   }
-  return data as unknown as CandidateObservation;
+  const obs = data as unknown as CandidateObservation;
+  if (obs.citation && typeof obs.citation === 'object') {
+    Object.freeze(obs.citation);
+  }
+  return obs;
 }
 
 export class SiteRegistryClient {
@@ -295,19 +317,30 @@ export class ClinicalObservationExtractor {
       theme: string;
     }>;
 
-    return parsed.map((item, idx) =>
-      validateCandidateObservation({
-        observation_id: `OBS-AI-${String(idx + 1).padStart(3, '0')}-${report.document_id}`,
-        site_id: report.site_id,
-        visit_date: report.visit_date,
-        theme: item.theme,
-        citation: {
-          document_id: report.document_id,
-          page_number: Number(item.page_number),
-          verbatim_sentence: item.verbatim_sentence,
-        },
-      })
-    );
+    return parsed
+      .filter((item) =>
+        verifyCitationAgainstReport(
+          {
+            document_id: report.document_id,
+            page_number: Number(item.page_number),
+            verbatim_sentence: (item.verbatim_sentence || '').trim(),
+          },
+          report
+        )
+      )
+      .map((item, idx) =>
+        validateCandidateObservation({
+          observation_id: `OBS-AI-${String(idx + 1).padStart(3, '0')}-${report.document_id}`,
+          site_id: report.site_id,
+          visit_date: report.visit_date,
+          theme: item.theme,
+          citation: {
+            document_id: report.document_id,
+            page_number: Number(item.page_number),
+            verbatim_sentence: item.verbatim_sentence.trim(),
+          },
+        })
+      );
   }
 }
 
@@ -427,10 +460,11 @@ export class MonitoringTriagePipeline {
       siteReportsCount.get(report.site_id)!.add(report.document_id);
 
       const extracted = await this.extractor.extractFromReport(report);
+      const verified = extracted.filter((obs) => verifyCitationAgainstReport(obs.citation, report));
       if (!observationsBySite.has(report.site_id)) {
         observationsBySite.set(report.site_id, []);
       }
-      observationsBySite.get(report.site_id)!.push(...extracted);
+      observationsBySite.get(report.site_id)!.push(...verified);
     }
 
     // 4. Grouping: By site & theme, generating same-theme-across-visits view
