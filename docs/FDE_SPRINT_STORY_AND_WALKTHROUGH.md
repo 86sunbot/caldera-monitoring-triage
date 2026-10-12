@@ -61,7 +61,7 @@ Before writing line 1 of Python, we locked our scope in [README.md](../README.md
 - **NO Scanned Paper Reports (Deferred):** About 8% of historical reports are scanned paper pictures. We explicitly deferred building optical character recognition (**OCR**) to Phase 2 rather than wasting 3 hours of sprint time.
 
 ### 2. The Live Risk Register (Proof Over Promises)
-We created [docs/governance/risk-register.md](risk-register.md) tracking 7 risks (**R-01 through R-07**). 
+We created [docs/governance/risk-register.md](governance/risk-register.md) tracking 7 risks (**R-01 through R-07**). 
 Under sprint rules, **a risk cannot be marked 'Treated' without naming a real test or code file in the repository**. Empty intentions score zero; empirical evidence scores maximum marks.
 
 ---
@@ -115,20 +115,20 @@ During the sprint, 3 surprise interruptions landed:
 
 ### Curveball 1 (11:00 AM) — The CISO Security Audit (Due by 14:00)
 - **The Challenge:** The Chief Information Security Officer asks: *"Hospital reports are written by people we don't employ. What if someone embeds prompt-injection hacks? And prove you aren't touching patient medical data."*
-- **Our Solution ([docs/governance/threat-model.md](threat-model.md)):**
+- **Our Solution ([docs/governance/threat-model.md](governance/threat-model.md)):**
   - Prompt Injection: Extraction uses deterministic sentence tokenization; text is treated strictly as passive data, never executed as commands.
   - Patient Data Barrier: Pointed to `test_edc_boundary_enforced` which actively rejects hospital patient data.
   - Inspection Status: Explained that the triage packet is an unarchived reading aid (like `Ctrl+F`), not a regulated GCP legal record.
 
 ### Curveball 2 (1:00 PM) — The Sponsor's Conference FOMO
 - **The Challenge:** The VP of Clinical Operations says: *"A competitor at a conference said they've had a predictive risk-scoring AI running across their hospitals for 8 months! Why are you giving me less?"*
-- **Our Solution ([docs/governance/sponsor-update.md](sponsor-update.md)):**
+- **Our Solution ([docs/governance/sponsor-update.md](governance/sponsor-update.md)):**
   - We gave a 5-minute Level 5 pitch: *"The competitor hasn't beaten us—**they are sitting on an uninspected regulatory time bomb**. If an FDA auditor asks how a site was chosen and they show an unvalidated AI score, it triggers an immediate violation warning (Form 483). What we built is safe, keeps us outside the 12-month GxP delay, and delivers working triage this quarter."*
 
 ### Curveball 3 (3:00 PM) — Drop 3 of 3: eTMF Document API Failing (HTTP 500 for a Subset of Studies)
 - **The Challenge:** The vendor's eTMF retrieval endpoint returns HTTP 500 for a subset of studies (degraded performance in some regions, no ETA). In our session, only 11 of 20 reports can be retrieved.
 - **Where This Bites:** A grouping view built on 11 of 20 reports looks identical to one built on 20! A clinical reviewer looking at a site with zero issues would draw conclusions from the gaps and assume clean hospital conduct, when in reality half the visits were never retrieved ("Three visits mention this" is very different when you could only read half the visits).
-- **Our Solution ([tests/test_curveball_degradation.py](../../tests/test_curveball_degradation.py)):**
+- **Our Solution ([tests/test_curveball_degradation.py](../tests/test_curveball_degradation.py)):**
   - **Defensible Degraded Behavior:** The pipeline does not crash or enter an infinite retry loop. It processes the 11 retrieved documents, marks `system_status = "DEGRADED"`, and sets `is_partial_dataset = True`.
   - **Mandatory Denominator Disclosure:** Renders an unavoidable amber warning: *"DATA COMPLETENESS & DENOMINATOR DISCLOSURE: ABSENCE OF EVIDENCE IS NOT EVIDENCE OF ABSENCE. 11 of 20 reports retrieved. Conclusions regarding clean site conduct cannot be drawn for unretrieved visits."*
   - **Per-Site Coverage Tracking:** Displays exact coverage ratios for every hospital (e.g. `Site 101: 3 of 6 reports processed - PARTIAL`).

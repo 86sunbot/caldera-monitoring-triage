@@ -130,17 +130,22 @@ class GoogleAIStudioClient:
 
                 results: List[CandidateObservation] = []
                 for idx, item in enumerate(items):
+                    page_num = int(item["page_number"])
+                    verbatim = str(item["verbatim_sentence"]).strip()
+                    citation = SourceCitation(
+                        document_id=report.document_id,
+                        page_number=page_num,
+                        verbatim_sentence=verbatim,
+                    )
+                    if not citation.verify_against_report(report):
+                        continue
                     results.append(
                         CandidateObservation(
                             observation_id=f"OBS-AI-{idx+1:03d}-{report.document_id}",
                             site_id=report.site_id,
                             visit_date=report.visit_date,
                             theme=item["theme"],
-                            citation=SourceCitation(
-                                document_id=report.document_id,
-                                page_number=int(item["page_number"]),
-                                verbatim_sentence=item["verbatim_sentence"]
-                            )
+                            citation=citation,
                         )
                     )
                 return results

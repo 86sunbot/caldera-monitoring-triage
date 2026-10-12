@@ -9,7 +9,7 @@ The models below strictly enforce:
 """
 
 from typing import List, Optional, Dict
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class MonitoringReport(BaseModel):
@@ -44,9 +44,25 @@ class MonitoringReport(BaseModel):
 
 class SourceCitation(BaseModel):
     """Verbatim grounding citation for auditability (ISO 42001 A.8)."""
+    model_config = ConfigDict(frozen=True)
     document_id: str
     page_number: int
     verbatim_sentence: str
+
+    def verify_against_report(self, report: "MonitoringReport") -> bool:
+        """
+        Verifies that this citation matches the source report's document_id,
+        references an existing page_number, and contains a non-empty verbatim
+        substring of that exact page's text.
+        """
+        if self.document_id != report.document_id:
+            return False
+        if self.page_number not in report.pages:
+            return False
+        cleaned = self.verbatim_sentence.strip()
+        if not cleaned:
+            return False
+        return cleaned in report.pages[self.page_number]
 
 
 class CandidateObservation(BaseModel):
